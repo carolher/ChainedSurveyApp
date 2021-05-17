@@ -1,0 +1,212 @@
+<!doctype html>
+<html>
+
+<head>
+  <title>ChainedSurveyApp</title>
+  <!--
+  Flask automatically makes files in the 'static' directory available via
+  '/static'.
+  -->
+  <link rel="stylesheet" type="text/css" href="/static/main.css">
+  <!-- CSS only -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
+    integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+ 
+
+  <script>
+    $('#myModal').modal('show')
+  
+    $('#btn-saveform"').submit(function(e) {
+      e.preventDefault();
+      $.ajax({
+          url: '/projects',
+          data: $(this).serialize(),
+          type: 'POST',
+          success: function(data) {
+              alert(data);
+          }
+      });
+  });
+
+  </script>
+  
+</head>
+
+<body>
+  <!-- Just an image -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+    <a class="navbar-brand" href="/">ChainedSurvey</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="/">Dashboard</a>
+        </li>
+        <li class="nav-item dropdown ">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="false">
+            {{ email }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <a class="dropdown-item" href="#">Settings</a>
+            <a class="dropdown-item" href="/logout">Log out</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <div class="container ">
+    <div class="row">
+      <div class="col pt-5">
+        <h2 class="h2">Survey List</h2>
+      </div>
+      <div class="col pt-5">
+        <!-- <button type="button" data-toggle="modal" data-target="#myModal" class="btn btn-primary btn-lg">Create Survey</button> -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+          Create Survey
+        </button>
+      </div>
+      <div class="row">
+        <div class="col pt-5">
+          <form class="form-inline">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success my-2 my-sm-0" type="button">Search</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+    <div class="list-group">
+      {%for items in project%}
+      <a href="#" class="list-group-item list-group-item-action active">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{name}}</h5>
+          <small>{{created_at}}</small>
+        </div>
+        <p class="mb-1">{{description}}</small>
+      </a>
+      {%endfor%}
+      <!-- <a href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">List group item heading</h5>
+          <small class="text-muted">3 days ago</small>
+        </div>
+        <p class="mb-1">Some placeholder content in a paragraph.</p>
+        <small class="text-muted">And some muted small print.</small>
+      </a>
+      <a href="#" class="list-group-item list-group-item-action">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">List group item heading</h5>
+          <small class="text-muted">3 days ago</small>
+        </div>
+        <p class="mb-1">Some placeholder content in a paragraph.</p>
+        <small class="text-muted">And some muted small print.</small>
+      </a> -->
+    </div>
+    <!-- <div class="container">
+      <div id="fb-editor"></div>
+    <div id="fb-rendered-form">
+      <form action="#"></form>
+      <button class="btn btn-default edit-form">Edit</button>
+    </div>
+    </div>
+     -->
+    <!-- <div id="build-wrap"></div> -->
+    <div class="modal " id="myModal" tabindex="-1" aria-labelledby="myModal" >
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="myModal">Create a Survey Form</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form action = "https://capstone-312002.ue.r.appspot.com/projects" method = "POST">
+              <div class="form-group">
+                <label for="projectID" class="col-form-label col-sm">Project ID:</label>
+                <input type="text" class="form-control" id="projectID" placeholder="Unique Numeric ID">
+              </div>
+              <div class="form-group">
+                <label for="name" class="col-form-label col-sm">Project:</label>
+                <input type="text" class="form-control" id="name" placeholder="Project name">
+              </div>
+              <div class="form-group">
+                <label for="description" class="col-form-label col-sm">Description:</label>
+                <textarea class="form-control" id="description" placeholder="Description"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="formData" class="col-form-label col-sm">Build your Survey</label>
+                <div id="formData"></div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="btn-saveform" type="submit" value="submit" class="btn btn-primary">Save Form</button>
+              </div>
+            </form>
+        
+          </div>
+         
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <!-- <script>
+  
+
+    jQuery(function($) {
+      var $fbEditor = $(document.getElementById('fb-editor')),
+        $formContainer = $(document.getElementById('fb-rendered-form')),
+        fbOptions = {
+          onSave: function() {
+            $fbEditor.toggle();
+            $formContainer.toggle();
+            $('form', $formContainer).formRender({
+              formData: formBuilder.formData
+            });
+          }
+        },
+        formBuilder = $fbEditor.formBuilder(fbOptions);
+    
+      $('.edit-form', $formContainer).click(function() {
+        $fbEditor.toggle();
+        $formContainer.toggle();
+      });
+    });
+  </script>
+   -->
+
+   <!-- <div id="fb-editor"></div> -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+   <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
+   <script>
+   jQuery(function($) {
+     $(document.getElementById('formData')).formBuilder();
+   });
+   
+   </script>
+
+  <!-- JavaScript Bundle with Popper -->
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+    integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js"
+    integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF"
+    crossorigin="anonymous"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.2/jquery-ui.min.js"></script>
+    <script src="https://formbuilder.online/assets/js/form-builder.min.js"></script>
+    <script src=" https://formbuilder.online/assets/js/form-render.min.js"></script>
+    -->
+   
+</body>
+
+</html>
